@@ -1,0 +1,95 @@
+<!doctype html>
+<!-- тут нам НУЖНО указать наш контроллер!!!!! -->
+<html lang="en" ng-app="phonecatApp">
+    <head>
+        <meta charset="utf-8">
+        <title>AngularJS Test</title>
+        <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
+        <link rel="stylesheet" href="css/app.css">
+        <script src="bower_components/angular/angular.js"></script>
+        <script src="js/controllers.js"></script>
+    </head>
+
+    <!-- Видимость нашего контроллера!!! -->
+    <body ng-controller="PhoneListCtrl">
+        <h1>{{ title }}</h1>
+        <input type="text" ng-model="query"/>
+
+        <ul>
+            <!-- phone - это наша новая переменная, а phones - это наш массив!!! -->
+            <!-- Это же работа с массивами!!! -->
+            <!-- Плюс мы же создали переменную которая у нас только в этом цикле!!! -->
+            <!-- Т.е. проблем быть вообще НЕ должно!!! -->
+            <!-- Теперь мы выводим только name = query + status = true!!! -->
+            <!--<li ng-repeat="phone in phones | filter: {$:query, status:true}">-->
+            <!-- Теперь передаём функцию из controller!!! -->
+            <li ng-repeat="phone in filterFun = (phones | filter:doneAndFilter)">
+                <span>{{ phone.name }}</span>
+                <p>
+                    {{ phone.snippet }}
+                    Status: {{ phone.status }}
+                    Priority: {{ phone.priority }}
+                </p>
+            </li>
+        </ul>
+
+        <!-- Теперь нам нужно вывести здесь количест которое осталось!!!!-->
+        <!--<p>Общее количество телефонов: {{ phones.length }}</p>-->
+        <!-- НО ЭТО ДВОЙНАЯ НАГРУЗКА НА КЛИЕНТА!!!! -->
+        <!--<p>Общее количество телефонов: {{ (phones | filter:doneAndFilter ).length }}</p>-->
+        <p>Общее количество телефонов: {{ filterFun.length }}</p>
+
+        <table>
+            <tr ng-repeat="i in [0, 1, 2, 3, 4, 5, 6, 7]">
+                <!--<td>{{ i }}</td>-->
+                <!-- ТЕПЕРЬ НУМЕРАЦИЯ С 1!!!-->
+                <td>{{ i+1 }}</td>
+            </tr>
+        </table>
+
+
+
+        <hr>
+        <ul>
+            <!-- валюта в $!!!-->
+            <li>1. Currency: {{ 234 | currency }}</li>
+            <li>2. Date:    {{ 12122015 | date: 'dd.MM.yyyy' }}</li>
+            <!-- знаки после запятой -->
+            <li>3. Number:    {{ 1234.1 | number:3 }}</li>
+            <li>4. Lowercase:    {{ 'My Very Long String' | lowercase }}</li>
+            <li>5. Uppercase:    {{ 'My Very Long String' | uppercase }}</li>
+            <!-- JSON. Очень часто используется для отладки! -->
+            <li>6. Json:    <pre>{{ {'text':'text', 'text2':'text text'} | json }}</pre></li>
+        </ul>
+
+
+
+        <hr>
+        <!-- Сортировка массива через "orderBy" -->
+        <table>
+            <thead>
+                <tr>
+                    <th>
+                        <!-- создаём сортировку при клике по "sort('name')" -->
+                        <!-- Т.е. мы передаём в ng-click нашу функцию и передаём параметр!!! -->
+                        <a href="" ng-click="sort('name')">
+                            Name
+                            <i class="glyphicon" ng-class="{
+                                'glyphicon-chevron-up':     isSortUp('name'),
+                                'glyphicon-chevron-down':   isSortDown('name')
+                            }"></i>
+                        </a>
+                    </th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr ng-repeat="phone in phones | orderBy:sortField:reverse">
+                <!--<tr ng-repeat="phone in phones | orderBy:sortField">-->
+                    <td>{{ phone.name }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+    </body>
+</html>
